@@ -44,9 +44,12 @@
     "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
     "eslint": "jlpm eslint:check --fix",
     "eslint:check": "eslint . --cache --ext .ts,.tsx",
+    "fmt": "prettier --write \"{optuna_dashboard/ts,typescript_tests,standalone_app/src,vscode/src}/**/*.{ts,tsx}\"",
     "install:extension": "jlpm build",
     "lint": "jlpm stylelint && jlpm prettier && jlpm eslint",
     "lint:check": "jlpm stylelint:check && jlpm prettier:check && jlpm eslint:check",
+    "lint:eslint": "eslint . --ext .ts,.tsx",
+    "lint:fmt": "prettier --list-different \"{optuna_dashboard/ts,typescript_tests,standalone_app/src,vscode/src}/**/*.{ts,tsx}\"",
     "prettier": "jlpm prettier:base --write --list-different",
     "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
     "prettier:check": "jlpm prettier:base --check",
@@ -57,11 +60,29 @@
     "watch:labextension": "jupyter labextension watch ."
   },
   "dependencies": {
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
     "@jupyterlab/application": "^4.0.0",
     "@jupyterlab/apputils": "^4.0.0",
     "@jupyterlab/coreutils": "^6.0.0",
     "@jupyterlab/launcher": "^4.0.0",
-    "@jupyterlab/services": "^7.0.0"
+    "@jupyterlab/services": "^7.0.0",
+    "@mui/icons-material": "^5.11.6",
+    "@mui/lab": "^5.0.0-alpha.128",
+    "@mui/material": "^5.12.1",
+    "axios": "^1.2.1",
+    "notistack": "^3.0.1",
+    "plotly.js-dist-min": "^2.22.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.4",
+    "react-router-dom": "^6.11.0",
+    "react-syntax-highlighter": "^15.5.0",
+    "recoil": "^0.7.7",
+    "rehype-mathjax": "^4.0.2",
+    "rehype-raw": "^6.1.1",
+    "remark-gfm": "^3.0.1",
+    "remark-math": "^5.1.1"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.0.0",
@@ -85,7 +106,11 @@
     "stylelint-config-standard": "^26.0.0",
     "stylelint-prettier": "^2.0.0",
     "typescript": "~5.0.2",
-    "yjs": "^13.5.0"
+    "yjs": "^13.5.0",
+    "@types/plotly.js": "^2.12.11",
+    "@types/react-dom": "^18.0.10",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/react-syntax-highlighter": "^15.5.5"
   },
   "sideEffects": [
     "style/*.css",
