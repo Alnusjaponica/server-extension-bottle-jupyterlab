@@ -1,6 +1,6 @@
 import {
-  JupyterFrontEnd,
-  JupyterFrontEndPlugin
+    JupyterFrontEnd,
+    JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
 import { ICommandPalette, IFrame } from '@jupyterlab/apputils';
@@ -45,7 +45,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       })
       .catch(reason => {
         console.error(
-          `The jupyterlab_examples_server server extension appears to be missing.\n${reason}`
+          `The optuna_dashboard server extension appears to be missing.\n${reason}`
         );
       });
 
@@ -60,7 +60,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       })
       .catch(reason => {
         console.error(
-          `Error on POST /jupyterlab-examples-server/hello ${dataToSend}.\n${reason}`
+          `Error on POST /optuna-dashboard/hello ${dataToSend}.\n${reason}`
         );
       });
 
@@ -95,7 +95,7 @@ class IFrameWidget extends IFrame {
   constructor() {
     super();
     const baseUrl = PageConfig.getBaseUrl();
-    this.url = baseUrl + 'jupyterlab-examples-server/public/index.html';
+    this.url = baseUrl + 'optuna-dashboard/public/index.html';
     this.id = 'doc-example';
     this.title.label = 'Server Doc';
     this.title.closable = true;

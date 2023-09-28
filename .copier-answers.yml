@@ -13,7 +13,7 @@ mimetype: ''
 mimetype_name: ''
 project_short_description: A minimal JupyterLab extension with backend and frontend
     parts.
-python_name: jupyterlab_examples_server
+python_name: optuna_dashboard
 repository: https://github.com/jupyterlab/extension-examples
 test: true
 viewer_name: ''

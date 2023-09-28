@@ -1,4 +1,4 @@
-import { test, expect } from '@jupyterlab/galata';
+import { expect, test } from '@jupyterlab/galata';
 
 test.use({ autoGoto: false });
 
@@ -6,12 +6,12 @@ test('should store state between reloads', async ({ page }) => {
   await Promise.all([
     page.waitForRequest(
       request =>
-        request.url().search('jupyterlab-examples-server/hello') >= 0 &&
+        request.url().search('optuna-dashboard/hello') >= 0 &&
         request.method() === 'GET'
     ),
     page.waitForRequest(
       request =>
-        request.url().search('/jupyterlab-examples-server/hello') >= 0 &&
+        request.url().search('/optuna-dashboard/hello') >= 0 &&
         request.method() === 'POST' &&
         request.postDataJSON()?.name === 'George'
     ),
@@ -32,9 +32,9 @@ test('should store state between reloads', async ({ page }) => {
 
   expect(
     await page
-      .frame({ url: '/jupyterlab-examples-server/public/index.html' })
+      .frame({ url: '/optuna-dashboard/public/index.html' })
       ?.waitForSelector(
-        'text=This content is served from the jupyterlab_examples_server extension.'
+        'text=This content is served from the optuna_dashboard extension.'
       )
   ).toBeTruthy();
 });

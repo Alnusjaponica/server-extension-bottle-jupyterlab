@@ -3,16 +3,11 @@ from ._version import __version__
 
 
 def _jupyter_labextension_paths():
-    return [{
-        "src": "labextension",
-        "dest": "@jupyterlab-examples/server-extension"
-    }]
+    return [{"src": "labextension", "dest": "@jupyterlab-examples/server-extension"}]
 
 
 def _jupyter_server_extension_points():
-    return [{
-        "module": "jupyterlab_examples_server"
-    }]
+    return [{"module": "optuna_dashboard"}]
 
 
 def _load_jupyter_server_extension(server_app):
@@ -24,7 +19,7 @@ def _load_jupyter_server_extension(server_app):
         JupyterLab application instance
     """
     setup_handlers(server_app.web_app)
-    name = "jupyterlab_examples_server"
+    name = "optuna_dashboard"
     server_app.log.info(f"Registered {name} server extension")
 
 

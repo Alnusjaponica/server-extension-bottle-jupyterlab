@@ -116,7 +116,7 @@ that looks like this:
 │   ├── handler.ts
 │   ├── index.ts
 │   └── __tests__              # JavaScript unit tests
-│       └── jupyterlab_examples_server.spec.ts
+│       └── optuna_dashboard.spec.ts
 │
 ├── style                      # CSS styling
 │   ├── base.css
@@ -129,7 +129,7 @@ that looks like this:
     ├── playwright.config.js
     ├── README.md
     ├── tests
-    │   └── jupyterlab_examples_server.spec.ts
+    │   └── optuna_dashboard.spec.ts
     └── yarn.lock
 ```
 
@@ -169,7 +169,7 @@ requestAPI<any>('hello')
   })
   .catch(reason => {
     console.error(
-      `The jupyterlab_examples_server server extension appears to be missing.\n${reason}`
+      `The optuna_dashboard server extension appears to be missing.\n${reason}`
     );
   });
 ```
@@ -199,7 +199,7 @@ requestAPI<any>('hello', {
   })
   .catch(reason => {
     console.error(
-      `Error on POST /jupyterlab-examples-server/hello ${dataToSend}.\n${reason}`
+      `Error on POST /optuna-dashboard/hello ${dataToSend}.\n${reason}`
     );
   });
 ```
@@ -227,7 +227,7 @@ export async function requestAPI<T>(
   const settings = ServerConnection.makeSettings();
   const requestUrl = URLExt.join(
     settings.baseUrl,
-    'jupyterlab-examples-server', // API Namespace
+    'optuna-dashboard', // API Namespace
     endPoint
   );
 
@@ -291,7 +291,7 @@ The next step is to build the full request URL:
 
 const requestUrl = URLExt.join(
   settings.baseUrl,
-  'jupyterlab-examples-server', // API Namespace
+  'optuna-dashboard', // API Namespace
   endPoint
 ```
 <!-- prettier-ignore-end -->
@@ -398,7 +398,7 @@ JupyterLab server is built on top of the [Tornado](https://www.tornadoweb.org/en
 your extension needs to be defined as a proper Python package with some hook functions:
 
 ```py
-# jupyterlab_examples_server/__init__.py
+# optuna_dashboard/__init__.py
 
 from ._version import __version__
 from .handlers import setup_handlers
@@ -413,7 +413,7 @@ def _jupyter_labextension_paths():
 
 def _jupyter_server_extension_points():
     return [{
-        "module": "jupyterlab_examples_server"
+        "module": "optuna_dashboard"
     }]
 
 
@@ -426,7 +426,7 @@ def _load_jupyter_server_extension(server_app):
         JupyterLab application instance
     """
     setup_handlers(server_app.web_app)
-    name = "jupyterlab_examples_server"
+    name = "optuna_dashboard"
     server_app.log.info(f"Registered {name} server extension")
 
 
@@ -440,7 +440,7 @@ to the server. But the most important one is `_load_jupyter_server_extension`
 that register new handlers.
 
 ```py
-# jupyterlab_examples_server/__init__.py#L26-L26
+# optuna_dashboard/__init__.py#L26-L26
 
 setup_handlers(server_app.web_app)
 ```
@@ -449,13 +449,13 @@ A handler is registered in the web application by linking an url to a class. In 
 example the url is _base_server_url_`/jlab-ext-example/hello` and the class handler is `RouteHandler`:
 
 ```py
-# jupyterlab_examples_server/handlers.py#L29-L35
+# optuna_dashboard/handlers.py#L29-L35
 
 host_pattern = ".*$"
 
 base_url = web_app.settings["base_url"]
 # Prepend the base_url so that it works in a JupyterHub setting
-route_pattern = url_path_join(base_url, "jupyterlab-examples-server", "hello")
+route_pattern = url_path_join(base_url, "optuna-dashboard", "hello")
 handlers = [(route_pattern, RouteHandler)]
 web_app.add_handlers(host_pattern, handlers)
 ```
@@ -465,7 +465,7 @@ implement the wanted HTTP verbs. For example, here, `/jlab-ext-example/hello` ca
 by a _GET_ or a _POST_ request. They will call the `get` or `post` method respectively.
 
 ```py
-# jupyterlab_examples_server/handlers.py#L10-L25
+# optuna_dashboard/handlers.py#L10-L25
 
 class RouteHandler(APIHandler):
     # The following decorator should be present on all verb methods (head, get, post,
@@ -474,7 +474,7 @@ class RouteHandler(APIHandler):
     @tornado.web.authenticated
     def get(self):
         self.finish(json.dumps({
-            "data": "This is /jupyterlab-examples-server/hello endpoint!"
+            "data": "This is /optuna-dashboard/hello endpoint!"
         }))
 
     @tornado.web.authenticated
@@ -496,11 +496,11 @@ by calling the `finish` method. That method can optionally take an argument that
 become the response body of the request in the frontend.
 
 ```py
-# jupyterlab_examples_server/handlers.py#L15-L18
+# optuna_dashboard/handlers.py#L15-L18
 
 def get(self):
     self.finish(json.dumps({
-        "data": "This is /jupyterlab-examples-server/hello endpoint!"
+        "data": "This is /optuna-dashboard/hello endpoint!"
     }))
 ```
 
@@ -513,7 +513,7 @@ sent by the frontend. When using JSON as communication format, you can directly 
 `get_json_body` helper method to convert the request body into a Python dictionary.
 
 ```py
-# jupyterlab_examples_server/handlers.py#L23-L24
+# optuna_dashboard/handlers.py#L23-L24
 
 input_data = self.get_json_body()
 data = {"greetings": "Hello {}, enjoy JupyterLab!".format(input_data["name"])}
@@ -523,9 +523,9 @@ The part responsible to serve static content with a `StaticFileHandler` handler
 is the following:
 
 ```py
-# jupyterlab_examples_server/handlers.py#L38-L44
+# optuna_dashboard/handlers.py#L38-L44
 
-doc_url = url_path_join(base_url, "jupyterlab-examples-server", "public")
+doc_url = url_path_join(base_url, "optuna-dashboard", "public")
 doc_dir = os.getenv(
     "JLAB_SERVER_EXAMPLE_STATIC_DIR",
     os.path.join(os.path.dirname(__file__), "public"),
@@ -569,7 +569,7 @@ requires = ["hatchling>=1.5.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version"]
 build-backend = "hatchling.build"
 
 [project]
-name = "jupyterlab_examples_server"
+name = "optuna_dashboard"
 readme = "README.md"
 license = {text = "BSD-3-Clause License"}
 requires-python = ">=3.8"
@@ -608,26 +608,26 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["jupyterlab_examples_server/labextension"]
+artifacts = ["optuna_dashboard/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"jupyterlab_examples_server/labextension" = "share/jupyter/labextensions/@jupyterlab-examples/server-extension"
+"optuna_dashboard/labextension" = "share/jupyter/labextensions/@jupyterlab-examples/server-extension"
 "install.json" = "share/jupyter/labextensions/@jupyterlab-examples/server-extension/install.json"
 "jupyter-config/server-config" = "etc/jupyter/jupyter_server_config.d"
 "jupyter-config/nb-config" = "etc/jupyter/jupyter_notebook_config.d"
 
 [tool.hatch.build.hooks.version]
-path = "jupyterlab_examples_server/_version.py"
+path = "optuna_dashboard/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "jupyterlab_examples_server/labextension/static/style.js",
-    "jupyterlab_examples_server/labextension/package.json",
+    "optuna_dashboard/labextension/static/style.js",
+    "optuna_dashboard/labextension/package.json",
 ]
-skip-if-exists = ["jupyterlab_examples_server/labextension/static/style.js"]
+skip-if-exists = ["optuna_dashboard/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -637,7 +637,7 @@ npm = ["jlpm"]
 build_cmd = "install:extension"
 npm = ["jlpm"]
 source_dir = "src"
-build_dir = "jupyterlab_examples_server/labextension"
+build_dir = "optuna_dashboard/labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"
@@ -656,7 +656,7 @@ ignore = ["W002"]
 ```
 
 It will build the frontend NPM package through its _factory_, and will ensure one of the
-generated files is `jupyterlab_examples_server/labextension/package.json`:
+generated files is `optuna_dashboard/labextension/package.json`:
 
 ```py
 # pyproject.toml#L57-L68
@@ -665,10 +665,10 @@ generated files is `jupyterlab_examples_server/labextension/package.json`:
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "jupyterlab_examples_server/labextension/static/style.js",
-    "jupyterlab_examples_server/labextension/package.json",
+    "optuna_dashboard/labextension/static/style.js",
+    "optuna_dashboard/labextension/package.json",
 ]
-skip-if-exists = ["jupyterlab_examples_server/labextension/static/style.js"]
+skip-if-exists = ["optuna_dashboard/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -682,7 +682,7 @@ JupyterLab is looking for frontend extensions when the Python package is install
 # pyproject.toml#L48-L49
 
 [tool.hatch.build.targets.wheel.shared-data]
-"jupyterlab_examples_server/labextension" = "share/jupyter/labextensions/@jupyterlab-examples/server-extension"
+"optuna_dashboard/labextension" = "share/jupyter/labextensions/@jupyterlab-examples/server-extension"
 ```
 
 The last piece of configuration needed is the enabling of the server extension. This is
@@ -690,12 +690,12 @@ done by copying the following JSON file:
 
 <!-- prettier-ignore-start -->
 ```json5
-// jupyter-config/server-config/jupyterlab_examples_server.json
+// jupyter-config/server-config/optuna_dashboard.json
 
 {
   "ServerApp": {
     "jpserver_extensions": {
-      "jupyterlab_examples_server": true
+      "optuna_dashboard": true
     }
   }
 }
@@ -738,7 +738,7 @@ file:
         "pip"
       ],
       "base": {
-        "name": "jupyterlab_examples_server"
+        "name": "optuna_dashboard"
       }
     }
   },
@@ -771,7 +771,7 @@ With the packaging described above, installing the extension is done in one comm
 ```bash
 # Install the server extension and
 # copy the frontend extension where JupyterLab can find it
-pip install jupyterlab_examples_server
+pip install optuna_dashboard
 ```
 
 As developer, you might want to install the package in local editable mode.
@@ -784,7 +784,7 @@ pip install -e .
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Enable the server extension
-jupyter server extension enable jupyterlab_examples_server
+jupyter server extension enable optuna_dashboard
 # Rebuild extension Typescript source after making changes
 jlpm run build
 ```

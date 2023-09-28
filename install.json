@@ -1,5 +1,5 @@
 {
   "packageManager": "python",
-  "packageName": "jupyterlab_examples_server",
-  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package jupyterlab_examples_server"
+  "packageName": "optuna_dashboard",
+  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package optuna_dashboard"
 }
